@@ -44,24 +44,16 @@ namespace AsmHighlighter
 				new AsmHighlighterColorableItem("Identifier", COLORINDEX.CI_USERTEXT_FG, COLORINDEX.CI_USERTEXT_BK),
 				new AsmHighlighterColorableItem("String", COLORINDEX.CI_MAROON, COLORINDEX.CI_USERTEXT_BK),
 				new AsmHighlighterColorableItem("Number", COLORINDEX.CI_USERTEXT_FG, COLORINDEX.CI_USERTEXT_BK),
-//				new AsmHighlighterColorableItem("Text", COLORINDEX.CI_USERTEXT_FG, COLORINDEX.CI_USERTEXT_BK),
-
-				// 6..
-//				new AsmHighlighterColorableItem("ASM Instruction", COLORINDEX.CI_BLUE, COLORINDEX.CI_USERTEXT_BK),
-//				new AsmHighlighterColorableItem("ASM Comment", COLORINDEX.CI_DARKGREEN, COLORINDEX.CI_USERTEXT_BK),
-//				new AsmHighlighterColorableItem("ASM Identifier", COLORINDEX.CI_SYSPLAINTEXT_FG, COLORINDEX.CI_USERTEXT_BK),
-//				new AsmHighlighterColorableItem("ASM String", COLORINDEX.CI_RED, COLORINDEX.CI_USERTEXT_BK),
-//				new AsmHighlighterColorableItem("ASM Number", COLORINDEX.CI_DARKBLUE, COLORINDEX.CI_USERTEXT_BK),
-				new AsmHighlighterColorableItem("ASM Register", COLORINDEX.CI_MAROON, COLORINDEX.CI_USERTEXT_BK, FONTFLAGS.FF_BOLD),
-				new AsmHighlighterColorableItem("ASM FpuInstruction", COLORINDEX.CI_AQUAMARINE, COLORINDEX.CI_USERTEXT_BK),
-				new AsmHighlighterColorableItem("ASM Directive", COLORINDEX.CI_PURPLE, COLORINDEX.CI_USERTEXT_BK),
+				new AsmHighlighterColorableItem("Text", COLORINDEX.CI_USERTEXT_FG, COLORINDEX.CI_USERTEXT_BK),
+                new AsmHighlighterColorableItem("ASM Directive", COLORINDEX.CI_BLUE, COLORINDEX.CI_USERTEXT_BK),
+                new AsmHighlighterColorableItem("ASM Register", COLORINDEX.CI_AQUAMARINE, COLORINDEX.CI_USERTEXT_BK, FONTFLAGS.FF_BOLD),
 				new AsmHighlighterColorableItem("ASM SimdInstruction", COLORINDEX.CI_AQUAMARINE, COLORINDEX.CI_USERTEXT_BK, FONTFLAGS.FF_BOLD)
 			};
 
             vs = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE)) as DTE;
         }
 
-        public bool IsDebugging()
+        public new bool IsDebugging()
         {
             bool isDebugging = false;
             Debugger debugger = vs.Debugger;
@@ -81,7 +73,7 @@ namespace AsmHighlighter
         public override int GetColorableItem(int index, out IVsColorableItem item)
         {
             if (index < 1 || index > m_colorableItems.Length)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
 
             item = m_colorableItems[index-1];
             return VSConstants.S_OK;
@@ -124,10 +116,7 @@ namespace AsmHighlighter
             return "";
         }
 
-        public override string Name
-        {
-            get { return "ASM Language"; }
-        }
+        public override string Name => "ASM Language";
 
         /// <summary>
         /// Validates the breakpoint location.
@@ -339,6 +328,11 @@ namespace AsmHighlighter
             public override Methods GetMethods(int line, int col, string name)
             {
                 return null;
+            }
+
+            public string Goto(Microsoft.VisualStudio.VSConstants cmd, IVsTextView textView, int line, int col, out TextSpan span)
+            {
+                throw new NotImplementedException();
             }
 
             public override string Goto(VSConstants.VSStd97CmdID cmd, IVsTextView textView, int line, int col, out TextSpan span)

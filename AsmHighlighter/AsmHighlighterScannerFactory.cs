@@ -24,7 +24,7 @@ namespace AsmHighlighter
 {
     public class AsmHighlighterScannerFactory {
         private static AsmHighlighterScanner masmScanner;
-        private static AsmHighlighterScanner nasmScanner;
+        // TODO: make use of: private static AsmHighlighterScanner nasmScanner;
         private static Dictionary<string, AsmHighlighterScanner> mapExtensionToScanner;
 
         static AsmHighlighterScannerFactory() {
@@ -33,7 +33,7 @@ namespace AsmHighlighter
 
             // MASM Scanner
             masmScanner = new AsmHighlighterScanner(new MAsmHighlighterTokenProvider());
-            mapExtensionToScanner.Add(AsmHighlighterSupportedExtensions.ASM,masmScanner);
+            mapExtensionToScanner.Add(AsmHighlighterSupportedExtensions.ASM, masmScanner);
             mapExtensionToScanner.Add(AsmHighlighterSupportedExtensions.COD, masmScanner);
             mapExtensionToScanner.Add(AsmHighlighterSupportedExtensions.INC, masmScanner);
             //// GLSL Scanner

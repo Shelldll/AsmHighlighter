@@ -340,9 +340,9 @@ namespace AsmHighlighter
                         {
                             buffer = ManagedFasm.Assemble(codeToAssemble);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            // Unable to parse instruction... skip
+                            // ignored
                         }
                         if (buffer != null)
                         {

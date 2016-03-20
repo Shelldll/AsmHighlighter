@@ -25,34 +25,26 @@ namespace AsmHighlighter
 {
     public class AsmHighlighterScanner : IScanner
     {
-        private Scanner lex;
-
         public AsmHighlighterScanner(IAsmHighlighterTokenProvider tokenProvider)
         {
-            lex = new Scanner();
-            lex.AsmHighlighterTokenProvider = tokenProvider;            
+            Lexer = new Scanner();
+            Lexer.AsmHighlighterTokenProvider = tokenProvider;            
         }
 
         public void SetSource(string source, int offset)
         {
-            lex.SetSource(source, offset);
+            Lexer.SetSource(source, offset);
         }
 
-        public Scanner Lexer
-        {
-            get
-            {
-                return lex;
-            }
-        }
+        public Scanner Lexer { get; }
 
         public List<TokenInfo> Parse(string toParse, int maxTokens)
         {
-            lex.SetSource(toParse, 0);
+            Lexer.SetSource(toParse, 0);
             int state = 0;
             int start, end;
             List<TokenInfo> tokenInfos = new List<TokenInfo>();
-            AsmHighlighterToken token = (AsmHighlighterToken)lex.GetNext(ref state, out start, out end);
+            AsmHighlighterToken token = (AsmHighlighterToken)Lexer.GetNext(ref state, out start, out end);
             while (token != AsmHighlighterToken.EOF && --maxTokens >=0 )
             {
                 TokenInfo tokenInfo = new TokenInfo();
@@ -60,7 +52,7 @@ namespace AsmHighlighter
                 tokenInfo.EndIndex = end;
                 tokenInfo.Token = (int)token;                
                 tokenInfos.Add(tokenInfo);
-                token = (AsmHighlighterToken)lex.GetNext(ref state, out start, out end);
+                token = (AsmHighlighterToken)Lexer.GetNext(ref state, out start, out end);
             }
             return tokenInfos;
         }
@@ -77,7 +69,7 @@ namespace AsmHighlighter
 		public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
 		{
 			int start, end;
-			AsmHighlighterToken token = (AsmHighlighterToken)lex.GetNext(ref state, out start, out end);
+			AsmHighlighterToken token = (AsmHighlighterToken)Lexer.GetNext(ref state, out start, out end);
 
 			// !EOL and !EOF
 			if (token == AsmHighlighterToken.EOF)
@@ -111,15 +103,15 @@ namespace AsmHighlighter
 				case AsmHighlighterToken.REGISTER_AVX:
 				case AsmHighlighterToken.REGISTER_AVX512:
 					// hugly. TODO generate a AsmHighlighterTokenColor to keep tracks of 6-7-8 TokenColors
-					tokenInfo.Color = (TokenColor)6;
+					tokenInfo.Color = (TokenColor)8;
 					tokenInfo.Type = TokenType.Identifier;
 					break;
-				case AsmHighlighterToken.FPUPROCESSOR:
-					tokenInfo.Color = (TokenColor)7;
-					tokenInfo.Type = TokenType.Identifier;
+                case AsmHighlighterToken.FPUPROCESSOR:
+					tokenInfo.Color = TokenColor.Keyword;
+					tokenInfo.Type = TokenType.Keyword;
 					break;
 				case AsmHighlighterToken.DIRECTIVE:
-					tokenInfo.Color = (TokenColor)8;
+					tokenInfo.Color = (TokenColor)7;
 					tokenInfo.Type = TokenType.Keyword;
 					break;
 				case AsmHighlighterToken.SIMDPROCESSOR:

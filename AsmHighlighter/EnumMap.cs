@@ -38,7 +38,7 @@ namespace AsmHighlighter
                 {
                     string enumName = line.Substring(0, indexEqu);
                     string value = line.Substring(indexEqu + 1, line.Length - indexEqu-1).Trim();
-                    string[] values = Regex.Split(value, @"[\t ]+");
+                    string[] values = value.Split(' ', '\t');
                     T enumValue = (T)Enum.Parse(typeof(T), enumName);
                     foreach (string token in values)
                     {
